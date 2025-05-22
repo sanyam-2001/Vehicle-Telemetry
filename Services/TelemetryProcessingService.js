@@ -7,7 +7,7 @@ export class TelemetryProcessingService {
         // Holds the first value of exceeded speed with its timestamp
         // If we encounter the same vehicleId again, we check if the time difference is greater than 30 seconds
         // If it is, we generate an alert
-        // If it is not, delete the key
+        // If it is not, nullify the key
         this.localCache = telemetryLocalCache;
         this.defaultSpeedLimit = 100;
     }

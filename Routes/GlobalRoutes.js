@@ -4,6 +4,7 @@ import { TelemetryProcessingService } from "../Services/TelemetryProcessingServi
 import { VehicleConfig } from "../Model/VehicleConfig.js";
 import { TelemetryLocalCache } from "../Services/TelemetryLocalCache.js";
 import { RateLimitingService } from "../Services/RateLimitingService.js";
+import { getVehiclePerformanceMetrics } from "../Utils/StatUtils.js";
 
 const router = express.Router();
 const alertService = new AlertService();
@@ -43,6 +44,16 @@ router.get('/vehicles/settings/:vehicleId/:newSpeed', async (req, res) => {
     const newSpeed = req.params.newSpeed;
     const response = await VehicleConfig.findOneAndUpdate({ vehicleId }, { speedLimit: newSpeed }, { new: true, upsert: true });
     res.json(response);
+});
+
+router.get('/vehicle/stats/:vehicleId', async (req, res) => {
+    try {
+        const vehicleId = req.params.vehicleId;
+        const response = await getVehiclePerformanceMetrics(vehicleId);
+        res.json(response);
+    } catch (err) {
+        res.send(500);
+    }
 });
 
 export default router;
