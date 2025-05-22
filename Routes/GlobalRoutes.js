@@ -3,12 +3,30 @@ import { AlertService } from "../Services/AlertService.js";
 import { TelemetryProcessingService } from "../Services/TelemetryProcessingService.js";
 import { VehicleConfig } from "../Model/VehicleConfig.js";
 import { TelemetryLocalCache } from "../Services/TelemetryLocalCache.js";
+import { RateLimitingService } from "../Services/RateLimitingService.js";
 
 const router = express.Router();
 const alertService = new AlertService();
 const telemetryLocalCache = new TelemetryLocalCache();
 const telemetryProcessingService = new TelemetryProcessingService(alertService, telemetryLocalCache);
-router.post('/telemetry', (req, res) => {
+const rateLimitingService = new RateLimitingService();
+
+// Rate limiting middleware for telemetry endpoint
+const rateLimitMiddleware = (req, res, next) => {
+    const vehicleId = req.body.vehicleId;
+
+    if (!vehicleId) {
+        return res.status(400).json({ error: 'vehicleId is required' });
+    }
+
+    if (rateLimitingService.isRateLimited(vehicleId)) {
+        return res.status(429).json({ error: 'Too many requests. Please wait 2 seconds between requests.' });
+    }
+
+    next();
+};
+
+router.post('/telemetry', rateLimitMiddleware, (req, res) => {
     const body = req.body;
     telemetryProcessingService.processIncomingTelemetry(body);
     res.json({ success: true });

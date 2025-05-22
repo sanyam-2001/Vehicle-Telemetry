@@ -46,4 +46,5 @@ class DataProductionService {
 const dataProductionServiceForV1 = new DataProductionService('V-1', 80, 90).startLoop();
 const dataProductionServiceForV2 = new DataProductionService('V-2', 110, 150).startLoop(4000);
 const dataProductionServiceForV3 = new DataProductionService('V-3', 90, 110).startLoop(6000);
+const dataProductionServiceForV4 = new DataProductionService('V-4', 200, 300).startLoop(1000);
 

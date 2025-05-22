@@ -11,7 +11,6 @@ export class TelemetryLocalCache {
                 this.cache[vehicleId] = Date.now();
                 return false;
             }
-            console.log(this.#timeDiff(telemetry.timestamp, this.cache[vehicleId]) > 10000)
             if (this.#timeDiff(telemetry.timestamp, this.cache[vehicleId]) > 10000) {
                 return true;
             }
