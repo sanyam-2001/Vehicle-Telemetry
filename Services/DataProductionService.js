@@ -28,7 +28,7 @@ class DataProductionService {
             }
 
             const data = await response.json();
-            console.log("Published Telemetry")
+            console.log(`Published Telemetry for ${this.vehicleId}`)
             return data;
         } catch (error) {
             console.error('Error Publishing');
@@ -43,5 +43,7 @@ class DataProductionService {
 };
 
 
-const dataProductionServiceForV1 = new DataProductionService('V-1').startLoop();
+const dataProductionServiceForV1 = new DataProductionService('V-1', 80, 90).startLoop();
 const dataProductionServiceForV2 = new DataProductionService('V-2', 110, 150).startLoop(4000);
+const dataProductionServiceForV3 = new DataProductionService('V-3', 90, 110).startLoop(6000);
+
